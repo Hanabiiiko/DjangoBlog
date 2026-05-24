@@ -1,3 +1,5 @@
+[![Maintainability](https://qlty.sh/gh/Hanabiiiko/projects/DjangoBlog/maintainability.svg)](https://qlty.sh/gh/Hanabiiiko/projects/DjangoBlog)
+
 # Simple Django Blog
 
 Учебный проект блога на Django с системой ролей пользователей.
