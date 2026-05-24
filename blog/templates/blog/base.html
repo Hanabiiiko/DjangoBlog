@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Blog</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #fff; color: #000; }
+  .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+  nav { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000; padding: 16px 0; }
+  nav a { text-decoration: none; color: #000; margin-right: 16px; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  button { border: 1px solid #000; background: #fff; padding: 6px 12px; cursor: pointer; font-size: 14px; }
+  button.delete { background: #000; color: #fff; }
+  a.btn { border: 1px solid #000; padding: 6px 12px; text-decoration: none; color: #000; font-size: 14px; }
+  .post-card { border-bottom: 1px solid #eee; padding: 20px 0; }
+  .post-card h2 { margin: 0 0 6px; }
+  .post-card h2 a { text-decoration: none; color: #000; }
+  .meta { color: #666; font-size: 13px; margin-bottom: 8px; }
+  .actions { margin-top: 10px; display: flex; gap: 8px; align-items: center; }
+  .message { border: 1px solid; padding: 10px; margin: 10px 0; }
+  .message.error { border-color: red; color: red; }
+  .message.success { border-color: green; color: green; }
+  table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; }
+  input[type=text], input[type=password], input[type=email], textarea, select { width: 100%; box-sizing: border-box; padding: 6px; border: 1px solid #ccc; font-size: 14px; }
+  .pagination { margin-top: 24px; display: flex; gap: 12px; }
+  form.inline { display: inline; }
+  h1 { margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav>
+    <a href="{% url 'post_list' %}"><strong>Simple Blog</strong></a>
+    <div class="nav-right">
+      {% if user.is_authenticated %}
+        <span>{{ user.username }} ({{ user.role }})</span>
+        {% if user.role == 'admin' or user.role == 'poster' %}
+          <a href="{% url 'post_create' %}">Новый пост</a>
+        {% endif %}
+        {% if user.role == 'admin' %}
+          <a href="{% url 'register' %}">Пользователи</a>
+        {% endif %}
+        <form method="post" action="{% url 'logout' %}" class="inline">
+          {% csrf_token %}
+          <button type="submit">Выйти</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Войти</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

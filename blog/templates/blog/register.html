@@ -1,0 +1,34 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h1>Управление пользователями</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Создать пользователя</button>
+</form>
+
+<hr>
+
+<h2>Существующие пользователи</h2>
+<table>
+  <thead>
+    <tr><th>Логин</th><th>Email</th><th>Роль</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.username }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.role }}</td>
+      <td>
+        <form method="post" action="{% url 'user_delete' u.pk %}" class="inline">
+          {% csrf_token %}
+          <button type="submit" class="delete" onclick="return confirm('Удалить пользователя?')">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
